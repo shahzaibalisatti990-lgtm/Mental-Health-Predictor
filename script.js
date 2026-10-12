@@ -106,7 +106,7 @@
     numericChecks.forEach(([key, min, max]) => {
       const input = document.getElementById(key);
       const val = payload[key];
-      if (val === "" || val === null || Number.isNaN(val)) {
+      if (val === "" || val === null || !Number.isFinite(val)) {
         errors.push([input, "This field is required."]);
       } else if (val < min || val > max) {
         errors.push([input, `Must be between ${min} and ${max === Infinity ? "0+" : max}.`]);
@@ -181,10 +181,11 @@
   }
 
   function renderResult(score) {
-    const clamped = Math.max(0, Math.min(10, score));
+    const numericScore = Number.isFinite(score) ? score : 0;
+    const clamped = Math.max(0, Math.min(10, numericScore));
     const { label, context } = bandFor(clamped);
 
-    scoreNumberEl.textContent = score.toFixed(2);
+    scoreNumberEl.textContent = numericScore.toFixed(2);
     scoreBandEl.textContent = label;
     scoreContextEl.textContent = context;
 
@@ -272,7 +273,7 @@
       }
 
       const data = await res.json();
-      if (typeof data.predicted_mental_health_score !== "number") {
+      if (typeof data.predicted_mental_health_score !== "number" || !Number.isFinite(data.predicted_mental_health_score)) {
         renderError("Unexpected response", "The API responded, but the score was missing or malformed.");
         return;
       }
