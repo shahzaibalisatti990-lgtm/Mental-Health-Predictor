@@ -25,7 +25,7 @@ with st.form("prediction_form"):
     st.subheader("Profile")
     age = st.number_input("Age", min_value=10, max_value=100, value=21, step=1)
     gender = st.selectbox("Gender", ["Male", "Female"])
-    country = st.text_input("Country", placeholder="e.g. India")
+    country = st.text_input("Country")
 
     st.subheader("Academic and digital habits")
     academic_level = st.selectbox(
